@@ -5,7 +5,9 @@ description: Common development conventions for agents working in any repository
 
 # Generic development conventions
 
-Baseline rules that apply in any repository, regardless of language, framework, or tooling. Repo-level instructions may override individual points; otherwise these defaults hold.
+Baseline rules that apply in any repository, regardless of language, framework, or tooling.
+
+> **Priority:** Everything in this skill has **lower priority than repo-specific rules.** Anything in the target repository's `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `README.md`, or other contributor docs overrides these defaults. Apply these rules only where the repo is silent.
 
 ## Terminology
 
@@ -51,10 +53,42 @@ One concern per commit. Do not mix unrelated changes (e.g. a fix plus a drive-by
 
 - PR titles follow the same Conventional Commits format as commit summaries, kept under 70 characters.
 - One concern per PR. Small, incremental, reviewable in one sitting.
-- Use the repo's PR template if one exists (e.g. `.github/pull_request_template.md`).
+- Use the repo's PR template if one exists (e.g. `.github/pull_request_template.md`). If none exists, use the default template below.
 - Prefer **Squash and Merge** unless the repo specifies otherwise.
 - Never merge when CI is red. No exceptions.
 - Address every review comment before merging; merge only after CI is green.
+
+### Default PR body template
+
+Use when the repo has no `pull_request_template.md`:
+
+```markdown
+## What
+Clear description of the change.
+
+## Why
+Problem or motivation.
+
+## How
+High-level approach.
+
+## Risk
+- Low / Medium / High
+- What can break
+
+## Security
+- Threat categories reviewed (or "No security-relevant code changes" with justification)
+- Findings and resolutions
+
+## Follow-ups
+List anything intentionally deferred with a one-line rationale, or write "No follow-ups." Prefer implementing in-scope work in this PR over deferring it.
+
+## Checklist
+- [ ] Tests added or updated
+- [ ] Backward compatibility considered
+- [ ] Security review performed against relevant threat model categories
+- [ ] All review comments addressed (code change or written reasoning)
+```
 
 ## Branch & push hygiene
 
