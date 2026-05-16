@@ -1,11 +1,11 @@
 ---
 name: generic-development
-description: Common development conventions for agents working in personal repositories. Apply whenever authoring code, commits, or pull requests.
+description: Common development conventions for agents working in any repository. Apply whenever authoring code, commits, or pull requests.
 ---
 
 # Generic development conventions
 
-Baseline rules that apply across all repositories, regardless of language, framework, or tooling. More specific repo-level instructions may override individual points, but these defaults hold otherwise.
+Baseline rules that apply in any repository, regardless of language, framework, or tooling. More specific repo-level instructions may override individual points, but these defaults hold otherwise.
 
 ## Attribution
 
