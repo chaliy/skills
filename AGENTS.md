@@ -1,3 +1,3 @@
 # skills
 
-Shared Claude Code skills.
+Personal skills.
