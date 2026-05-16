@@ -1,2 +1,2 @@
 # skills
-Personmal skills
+Personal skills
