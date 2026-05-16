@@ -7,6 +7,11 @@ description: Common development conventions for agents working in any repository
 
 Baseline rules that apply in any repository, regardless of language, framework, or tooling. Repo-level instructions may override individual points; otherwise these defaults hold.
 
+## Terminology
+
+- **ship** — bring the change to PR quality (CI green, docs updated, adequate test coverage) and then merge it to the default branch (`main`).
+- **smoke test** — run end-to-end checks to verify the new functionality actually works in a realistic flow, not just that unit tests pass.
+
 ## Style
 
 - Terse. Drop filler. Minimum tokens for the same meaning.
