@@ -5,51 +5,58 @@ description: Common development conventions for agents working in any repository
 
 # Generic development conventions
 
-Baseline rules that apply in any repository, regardless of language, framework, or tooling. More specific repo-level instructions may override individual points, but these defaults hold otherwise.
+Baseline rules that apply in any repository, regardless of language, framework, or tooling. Repo-level instructions may override individual points; otherwise these defaults hold.
+
+## Style
+
+- Terse. Drop filler. Minimum tokens for the same meaning.
+- Prefer reading more code over guessing. If still stuck, ask with short concrete options.
+- Unrecognized changes in the working tree: assume another agent or the human made them — keep going. Only stop and ask if continuing would cause issues.
+
+## Branch base
+
+- Always work on top of the latest default branch (`main` / `master`) from the remote.
+- Sync before starting and before shipping: `git fetch origin <default>` then branch or rebase from `origin/<default>`.
+- In worktrees and detached states, verify the branch (`git status --branch`, `git worktree list`) — do not assume `HEAD` tracks a branch.
 
 ## Attribution
 
-All work is attributed to the human. Do not add AI/agent attribution anywhere:
+All work is attributed to the real human user, never to an agent or bot.
 
-- No "Co-Authored-By", "Generated with", or similar trailers in commit messages.
-- No AI attribution in PR titles, descriptions, code comments, or docs.
-- No session URLs or tool-identifying footers in committed artifacts.
-
-The human is the author of every commit and PR.
+- Git identity (`user.name`, `user.email`) must resolve to a real human. If the current identity is missing or agent-like, stop and ask — do not commit with a default or bot identity.
+- Never set `GIT_AUTHOR_NAME`, `GIT_COMMITTER_NAME`, or `user.name` to an AI/bot identity ("Claude", "Cursor", "Copilot", "github-actions[bot]", and similar).
+- No `Co-authored-by` trailers referencing AI tools.
+- No "Generated with", "Authored by AI", agent session URLs, or similar attribution in commit messages, PR titles, PR bodies, code comments, or docs.
+- Merge commits must also be authored by the real human.
 
 ## Commits
 
-Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/):
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): description`.
 
-```
-<type>(<optional scope>): <short summary>
+Common types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `perf`, `build`, `ci`, `style`.
 
-<optional body>
-
-<optional footer>
-```
-
-Common types: `feat`, `fix`, `chore`, `refactor`, `docs`, `test`, `perf`, `build`, `ci`, `style`.
-
-- Summary in the imperative mood, lower case, no trailing period.
-- Use a scope when it adds clarity (e.g. `feat(auth): ...`).
+- Imperative mood, lower case, no trailing period.
+- Use a scope when it adds clarity.
 - Use `!` or a `BREAKING CHANGE:` footer for breaking changes.
+- Use `chore` for repo meta updates (docs about the repo itself, `AGENTS.md`, configuration housekeeping).
 
 One concern per commit. Do not mix unrelated changes (e.g. a fix plus a drive-by refactor) into a single commit.
 
 ## Pull requests
 
-PR titles follow the same Conventional Commits format as commit summaries.
-
-One concern per PR. Keep PRs small and focused so they can be reviewed in one sitting.
-
-PR body conventions: _to be defined._
+- PR titles follow the same Conventional Commits format as commit summaries, kept under 70 characters.
+- One concern per PR. Small, incremental, reviewable in one sitting.
+- Use the repo's PR template if one exists (e.g. `.github/pull_request_template.md`).
+- Prefer **Squash and Merge** unless the repo specifies otherwise.
+- Never merge when CI is red. No exceptions.
+- Address every review comment before merging; merge only after CI is green.
 
 ## Branch & push hygiene
 
-- Work on feature branches; never commit directly to `main` / `master` / the default branch.
+- Work on feature branches; never commit directly to the default branch.
 - Never force-push without explicit permission from the human. Never force-push to shared branches.
 - Do not skip safety nets: no `--no-verify`, no bypassing pre-commit / pre-push hooks, no disabling signing, no turning off tests to make CI pass.
+- Run the repo's local pre-push / quality checks before `git push` if any exist (e.g. `just pre-push`, `npm run lint`, `make check`).
 - If a hook or check fails, fix the underlying cause.
 
 ## Secrets and sensitive files
@@ -62,6 +69,7 @@ PR body conventions: _to be defined._
 
 - Fix the underlying problem, not the visible symptom. Don't suppress, swallow, or hide errors to make them go away.
 - Don't loosen assertions, weaken tests, or relax type/lint rules just to get a green build.
+- For bug fixes, write a failing test that reproduces the bug before fixing it.
 - If the root cause is out of scope, say so explicitly instead of patching around it.
 
 ## Dependencies
@@ -74,6 +82,7 @@ PR body conventions: _to be defined._
 
 - Keep comments minimal and high-signal.
 - Write a comment when the code's purpose, intent, or reasoning is not obvious from reading it — including a brief description of *why* something is done, a non-obvious constraint, an invariant, a workaround, or surprising behavior.
+- Document important design decisions as comments near the code that implements them (e.g. top of the file or near the relevant function).
 - Do not narrate *what* the code does when well-named identifiers already make it clear.
 - Do not include task context, ticket numbers, PR references, "added for X", or "used by Y" — that belongs in commit messages and PR descriptions.
 
