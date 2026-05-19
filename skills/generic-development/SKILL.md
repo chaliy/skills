@@ -30,7 +30,10 @@ Baseline rules that apply in any repository, regardless of language, framework, 
 
 All work is attributed to the real human user, never to an agent or bot.
 
-- Git identity (`user.name`, `user.email`) must resolve to a real human. If the current identity is missing or agent-like, stop and ask — do not commit with a default or bot identity.
+- Git identity must resolve to the real human:
+  - `user.name`: `Mykhailo Chalyi`
+  - `user.email`: `mike@chaliy.name`
+- If the current identity is missing, differs from the above, or looks agent-like, stop and ask — do not commit with a default or bot identity.
 - Never set `GIT_AUTHOR_NAME`, `GIT_COMMITTER_NAME`, or `user.name` to an AI/bot identity ("Claude", "Cursor", "Copilot", "github-actions[bot]", and similar).
 - No `Co-authored-by` trailers referencing AI tools.
 - No "Generated with", "Authored by AI", agent session URLs, or similar attribution in commit messages, PR titles, PR bodies, code comments, or docs.
