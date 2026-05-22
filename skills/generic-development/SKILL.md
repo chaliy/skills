@@ -12,7 +12,7 @@ Baseline rules that apply in any repository, regardless of language, framework, 
 ## Terminology
 
 - **ship** — bring the change to PR quality (CI green, docs updated, adequate test coverage) and then merge it to the default branch (`main`).
-- **smoke test** — run end-to-end checks to verify the new functionality actually works in a realistic flow, not just that unit tests pass.
+- **smoke test** — a confirmed end-to-end manual test of the impacted functionality. Identify the impact first: until the impacted behavior has been exercised end-to-end, it is not tested. Do whatever is needed to run it end-to-end; do not stop at intermediate signals like a green unit test run.
 
 ## Style
 
@@ -127,6 +127,12 @@ List anything intentionally deferred with a one-line rationale, or write "No fol
 - Document important design decisions as comments near the code that implements them (e.g. top of the file or near the relevant function).
 - Do not narrate *what* the code does when well-named identifiers already make it clear.
 - Do not include task context, ticket numbers, PR references, "added for X", or "used by Y" — that belongs in commit messages and PR descriptions.
+
+## Unit tests
+
+- Prefer state testing: assert on observable results and resulting state. Avoid behavioural testing like asserting that a particular method was called or how often.
+- Don't write tests just to have tests. Each test should justify its existence by covering behavior not already covered.
+- Review the test suite for duplication and generalize where it helps; remove tests that are subsumed by broader coverage.
 
 ## No speculative code
 
