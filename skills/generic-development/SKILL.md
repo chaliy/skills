@@ -13,6 +13,8 @@ Baseline rules that apply in any repository, regardless of language, framework, 
 
 - **ship** — bring the change to PR quality (CI green, docs updated, adequate test coverage) and then merge it to the default branch (`main`).
 - **smoke test** — a confirmed end-to-end manual test of the impacted functionality. Identify the impact first: until the impacted behavior has been exercised end-to-end, it is not tested. Do whatever is needed to run it end-to-end; do not stop at intermediate signals like a green unit test run.
+- **implement** — deliver a working slice of functionality end to end. First understand what is going on (read the relevant code and context), then write the implementation, then write unit tests covering it. Not just the happy-path code — the slice is done when it is understood, built, and tested.
+- **challenge me** — push back instead of just executing. Ask about the current situation, design, and requirements, and raise the questions whose answers would produce better results or better shared understanding. Surface gaps, assumptions, and alternatives before committing to an approach.
 
 ## Style
 
