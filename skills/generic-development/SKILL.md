@@ -90,10 +90,39 @@ List anything intentionally deferred with a one-line rationale, or write "No fol
 
 ## Checklist
 - [ ] Tests added or updated
+- [ ] Evidence attached for user-visible changes (or not applicable)
 - [ ] Backward compatibility considered
 - [ ] Security review performed against relevant threat model categories
 - [ ] All review comments addressed (code change or written reasoning)
 ```
+
+## Evidence for UI changes
+
+Any change with a visible effect (UI, CLI output, rendered docs) ships with proof in the PR body. A description of what it should look like is not evidence — show the actual rendered result, after the change, from a real run.
+
+- Capture the impacted screen or flow yourself (headless browser, screenshot tool, screen recording). Prefer a short video when the change is interactive or stateful; a still image is enough for static layout or styling.
+- Show before *and* after when the change modifies existing UI. A single "after" shot is enough for net-new UI.
+- Crop to the relevant area. Full-desktop screenshots with unrelated chrome are noise.
+
+### Uploading assets
+
+Upload to GitHub's attachment CDN — the same one drag-and-drop uses. Attachments inherit the repository's visibility, and no browser or computer use is needed:
+
+```bash
+curl -s "https://uploads.github.com/user-attachments/assets?name=<f>&content_type=<mime>&repository_id=<id>" \
+  -X POST \
+  -H "Authorization: Bearer $(gh auth token)" \
+  -H "Accept: application/json" \
+  --data-binary @<f>
+```
+
+Embed the returned `.url` as markdown in the PR or issue body.
+
+- `422` — unsupported content type. `404` — bad repository id, or no push access.
+- Videos: same endpoint with `content_type: video/mp4` or `video/webm`. Embed the URL on its own bare line — GitHub renders a player; `![]()` image syntax does not.
+- Playwright records `webm`; transcode for broad playback before upload: `ffmpeg -i in.webm -c:v libx264 -pix_fmt yuv420p out.mp4`.
+- Never commit proof assets to a product repo branch. No `.github/pr-assets` directory, no screenshots in the diff.
+- If the endpoint fails or the artifact isn't media, fall back to whatever artifact hosting the repo already uses, and link it.
 
 ## Branch & push hygiene
 
