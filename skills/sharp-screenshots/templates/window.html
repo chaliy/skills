@@ -1,0 +1,141 @@
+<!doctype html>
+<meta charset="utf-8" />
+<!--
+  Generic window template for sharp screenshots of anything you rebuild in
+  HTML: a terminal session, a desktop or mobile app screen, a dialog, a
+  notification, a code snippet, a chat.
+
+  1. Pick the chrome: set data-chrome on .window to "browser", "terminal",
+     "mac" (title bar only) or "none".
+  2. Set --width to the CSS width the image should have (2x is applied at
+     render time, so 720 here gives a 1440 px image).
+  3. Put the content inside .content, using the real text of what you show.
+  4. Render:
+       node <skill>/sharp-screenshot.mjs shot <skill>/templates/window.html out.png --selector .stage
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;600&display=block"
+/>
+<style>
+  :root {
+    --width: 720px;
+    --page: #eceff4;
+    --surface: #ffffff;
+    --border: #d8dde6;
+    --text: #1f2328;
+    --muted: #6b7280;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    background: var(--page);
+    color: var(--text);
+    font-family: Inter, 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* The element that gets captured. Padding leaves room for the shadow. */
+  .stage {
+    display: inline-block;
+    padding: 24px;
+    background: var(--page);
+  }
+  .window {
+    width: var(--width);
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 38px;
+    padding: 0 14px;
+    background: #f3f4f6;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .dots {
+    display: flex;
+    gap: 7px;
+  }
+  .dots i {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ff5f57;
+  }
+  .dots i:nth-child(2) {
+    background: #febc2e;
+  }
+  .dots i:nth-child(3) {
+    background: #28c840;
+  }
+  .title {
+    flex: 1;
+    text-align: center;
+    margin-right: 52px;
+  }
+  .url {
+    flex: 1;
+    height: 24px;
+    line-height: 24px;
+    padding: 0 10px;
+    border-radius: 6px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+  }
+  .content {
+    padding: 20px 22px;
+  }
+  [data-chrome='none'] .bar,
+  [data-chrome='mac'] .url,
+  [data-chrome='terminal'] .url,
+  [data-chrome='browser'] .title {
+    display: none;
+  }
+  [data-chrome='terminal'] {
+    --surface: #1e1f24;
+    --border: #2c2e35;
+    --text: #e6e6e6;
+    --muted: #9aa0aa;
+  }
+  [data-chrome='terminal'] .bar {
+    background: #2a2c33;
+  }
+  [data-chrome='terminal'] .content {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 14px;
+    white-space: pre-wrap;
+  }
+  .prompt {
+    color: #7ee787;
+  }
+  .dim {
+    color: var(--muted);
+  }
+</style>
+
+<div class="stage">
+  <div class="window" data-chrome="terminal">
+    <div class="bar">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="title">zsh</span>
+      <span class="url">https://example.com/page</span>
+    </div>
+    <!-- Replace with the real content you are showing. -->
+    <div class="content"><span class="prompt">$</span> node sharp-screenshot.mjs check out.png --display-width 720
+<span class="dim">out.png: 1456x632 png, shown at 720 CSS px = 2.02x (need 2x)</span></div>
+  </div>
+</div>
