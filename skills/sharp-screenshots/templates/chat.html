@@ -1,0 +1,203 @@
+<!doctype html>
+<meta charset="utf-8" />
+<!--
+  Message-thread template for sharp screenshots of a conversation. For other
+  rebuilt UI (terminal, app window, dialog) start from window.html instead.
+  Edit DATA below with the VERBATIM text, names and times of a real
+  conversation, then render:
+    node <skill>/sharp-screenshot.mjs shot <skill>/templates/chat.html out.png --selector .stage
+  Avatars: use full-resolution source assets (agent avatar files, profile
+  photos). Without one, an initial on a colored square is drawn.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Lato:wght@400;700;900&display=block"
+/>
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    background: #eceff4;
+    color: #1d1c1d;
+    /* Lato has no Cyrillic: Inter covers it. Emoji come from the system emoji font. */
+    font-family:
+      Lato, Inter, 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .stage {
+    padding: 44px;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    width: max-content;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid #d6dbe2;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow:
+      0 14px 34px rgba(16, 32, 64, 0.16),
+      0 2px 6px rgba(16, 32, 64, 0.06);
+  }
+  .head {
+    background: #f8f9fb;
+    border-bottom: 1px solid #e2e5ea;
+    height: 52px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: Inter, sans-serif;
+  }
+  .head b {
+    font-size: 19px;
+    font-weight: 600;
+  }
+  .head span {
+    font-size: 15px;
+    color: #6e737d;
+  }
+  .body {
+    padding: 16px 24px 20px;
+  }
+  .msg {
+    display: flex;
+    gap: 8px;
+    padding: 6px 0;
+  }
+  .av {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    flex: none;
+    margin-top: 2px;
+    background: #4a5568 center / cover;
+    color: #fff;
+    font:
+      700 16px/36px Lato,
+      sans-serif;
+    text-align: center;
+  }
+  .mc {
+    flex: 1;
+    min-width: 0;
+  }
+  .meta {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    line-height: 22px;
+  }
+  .name {
+    font-weight: 900;
+    font-size: 15px;
+  }
+  .badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    line-height: 14px;
+    padding: 1px 3px;
+    background: rgba(29, 28, 29, 0.08);
+    color: #616061;
+    border-radius: 2px;
+  }
+  .ts {
+    font-size: 12px;
+    color: #616061;
+  }
+  .txt {
+    font-size: 15px;
+    line-height: 22px;
+  }
+  .txt .gap {
+    margin-top: 8px;
+  }
+  .mention {
+    color: #1264a3;
+    background: rgba(29, 155, 209, 0.1);
+    border-radius: 3px;
+    padding: 0 2px;
+  }
+  .rep {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #616061;
+    margin: 4px 0 2px;
+  }
+  .rep::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #ddd;
+  }
+  ul {
+    padding-left: 26px;
+    margin: 2px 0;
+  }
+  li {
+    font-size: 15px;
+    line-height: 22px;
+  }
+</style>
+<body>
+  <div class="stage" id="stage"></div>
+  <script>
+    // One entry per card. `offset` shifts a card right for a stacked look.
+    // Message `html` may use <b>, <p>, <ul><li>, and <span class="mention">@Name</span>.
+    const DATA = [
+      {
+        title: '# general',
+        subtitle: 'Example Agent',
+        width: 640,
+        messages: [
+          {
+            name: 'alex',
+            ts: '10:02',
+            html: '<span class="mention">@Example Agent</span> when is the office closed this month?',
+          },
+          { replies: '1 reply' },
+          {
+            name: 'Example Agent',
+            badge: 'APP',
+            ts: '10:02',
+            avatar: '',
+            html: '<p>The office is closed on Friday, November 27. (handbook/holidays.md)</p>',
+          },
+        ],
+      },
+    ];
+
+    const esc = (s) =>
+      s.replace(
+        /[&<>"]/g,
+        (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]
+      );
+    const stage = document.getElementById('stage');
+    for (const c of DATA) {
+      const rows = c.messages
+        .map((m) => {
+          if (m.replies) return `<div class="rep">${esc(m.replies)}</div>`;
+          const av = m.avatar
+            ? `<div class="av" style="background-image:url('${esc(m.avatar)}')"></div>`
+            : `<div class="av">${esc(m.name[0].toUpperCase())}</div>`;
+          const badge = m.badge
+            ? `<span class="badge">${esc(m.badge)}</span>`
+            : '';
+          return `<div class="msg">${av}<div class="mc"><div class="meta"><span class="name">${esc(m.name)}</span>${badge}<span class="ts">${esc(m.ts)}</span></div><div class="txt">${m.html}</div></div></div>`;
+        })
+        .join('');
+      stage.insertAdjacentHTML(
+        'beforeend',
+        `<div style="margin-left:${c.offset ?? 0}px"><div class="card" style="width:${c.width ?? 640}px"><div class="head"><b>${esc(c.title)}</b><span>${esc(c.subtitle ?? '')}</span></div><div class="body">${rows}</div></div></div>`
+      );
+    }
+  </script>
+</body>
